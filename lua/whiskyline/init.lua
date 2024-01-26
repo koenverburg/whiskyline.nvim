@@ -1,3 +1,4 @@
+local custom = require('whiskyline.custom')
 local co, api = coroutine, vim.api
 local whk = {}
 
@@ -39,27 +40,28 @@ local function default()
     --
   }
   local e, pieces = {}, {}
+  local items = custom.segments or comps
   vim
-    .iter(ipairs(comps))
-    :map(function(key, item)
-      if type(item.stl) == 'string' then
-        pieces[#pieces + 1] = stl_format(item.name, item.stl)
-      else
-        pieces[#pieces + 1] = item.default and stl_format(item.name, item.default) or ''
-        for _, event in ipairs({ unpack(item.event or {}) }) do
-          if not e[event] then
-            e[event] = {}
+      .iter(ipairs(items))
+      :map(function(key, item)
+        if type(item.stl) == 'string' then
+          pieces[#pieces + 1] = stl_format(item.name, item.stl)
+        else
+          pieces[#pieces + 1] = item.default and stl_format(item.name, item.default) or ''
+          for _, event in ipairs({ unpack(item.event or {}) }) do
+            if not e[event] then
+              e[event] = {}
+            end
+            e[event][#e[event] + 1] = key
           end
-          e[event][#e[event] + 1] = key
         end
-      end
 
-      if item.attr and item.name then
-        stl_hl(item.name, item.attr)
-      end
-    end)
-    :totable()
-  return comps, e, pieces
+        if item.attr and item.name then
+          stl_hl(item.name, item.attr)
+        end
+      end)
+      :totable()
+  return items, e, pieces
 end
 
 local function render(comps, events, pieces)
