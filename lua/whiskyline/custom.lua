@@ -86,7 +86,7 @@ function line.gitadd()
     end,
     name = 'gitadd',
     event = { 'User GitSignsUpdate', 'BufEnter' },
-    attr = helpers.stl_attr('GitSignsAdd'), -- change of color
+    attr = helpers.stl_attr('GitSignsAdd', true), -- change of color
   }
 
   return result
@@ -101,7 +101,7 @@ function line.gitchange()
     end,
     name = 'gitchange',
     event = { 'User GitSignsUpdate', 'BufEnter' },
-    attr = helpers.stl_attr('GitSignsChange'), -- change of color
+    attr = helpers.stl_attr('GitSignsChange', true), -- change of color
   }
   return result
 end
@@ -115,7 +115,7 @@ function line.gitdelete()
     end,
     name = 'gitdelete',
     event = { 'User GitSignsUpdate', 'BufEnter' },
-    attr = helpers.stl_attr('GitSignsDelete'), -- change of color
+    attr = helpers.stl_attr('GitSignsDelete', true), -- change of color
   }
   return result
 end
@@ -137,7 +137,7 @@ end
 
 function line.modified()
   return {
-    stl = utils.dim(' %m'),
+    stl = utils.dim(' %m') .. '%#Normal#',
     name = 'modified',
     event = { 'BufModifiedSet' },
   }
@@ -162,10 +162,10 @@ custom.segments = {
   p.pad(),
 
   -- Move this to winbar
-  -- p.diagError(),
-  -- p.diagWarn(),
-  -- p.diagHint(),
-  -- p.diagInfo(),
+  p.diagError(),
+  p.diagWarn(),
+  p.diagHint(),
+  p.diagInfo(),
 
   p.space(),
 
@@ -173,5 +173,7 @@ custom.segments = {
   p.space(),
 }
 
+
+vim.cmd [[ hi clear StatusLine ]]
 
 return custom
