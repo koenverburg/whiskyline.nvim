@@ -5,6 +5,7 @@ local helpers = require('whiskyline.helpers')
 local line = {}
 local custom = {}
 
+-- #region line
 -- Show full mode name, og shorts its to 3 characters and upper cases its
 function line.mode()
   local alias = helpers.alias_mode()
@@ -55,16 +56,16 @@ function line.lsp()
 
     for _, client in pairs(clients) do
       -- Maybe not all lsps...
-      if client.name ~= "null-ls" then
+      if client.name ~= 'null-ls' then
         table.insert(names, client.name)
       end
     end
 
     if #names > 0 then
-      return utils.dim("lsp: " .. table.concat(names, ", "))
+      return utils.dim('lsp: ' .. table.concat(names, ', '))
     end
 
-    return ""
+    return ''
   end
 
   local result = {
@@ -143,6 +144,8 @@ function line.modified()
   }
 end
 
+-- #endregion
+
 custom.segments = {
   line.mode(),
   p.space(),
@@ -173,7 +176,6 @@ custom.segments = {
   p.space(),
 }
 
-
-vim.cmd [[ hi clear StatusLine ]]
+vim.cmd([[ hi clear StatusLine ]])
 
 return custom
